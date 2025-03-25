@@ -35,7 +35,7 @@
 */
 
 #include "u8x8.h"
-
+#include "i2c.h"
 uint8_t u8x8_byte_SetDC(u8x8_t *u8x8, uint8_t dc)
 {
   return u8x8->byte_cb(u8x8, U8X8_MSG_BYTE_SET_DC, dc, NULL);
@@ -573,6 +573,41 @@ static void i2c_write_byte(u8x8_t *u8x8, uint8_t b)
   /* 0: ack was given by client */
   /* 1: nothing happend during ack cycle */  
   i2c_read_bit(u8x8);
+}
+
+uint8_t u8x8_byte_hw_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+{
+    static uint8_t buffer[32];		/* u8g2/u8x8 will never send more than 32 bytes between START_TRANSFER and END_TRANSFER */
+    static uint8_t buf_idx;
+    uint8_t *data;
+
+    switch(msg)
+    {
+        case U8X8_MSG_BYTE_SEND:
+            data = (uint8_t *)arg_ptr;
+            while( arg_int > 0 )
+            {
+                buffer[buf_idx++] = *data;
+                data++;
+                arg_int--;
+            }
+            break;
+        case U8X8_MSG_BYTE_INIT:
+            /* add your custom code to init i2c subsystem */
+            break;
+        case U8X8_MSG_BYTE_SET_DC:
+            /* ignored for i2c */
+            break;
+        case U8X8_MSG_BYTE_START_TRANSFER:
+            buf_idx = 0;
+            break;
+        case U8X8_MSG_BYTE_END_TRANSFER:
+            HAL_I2C_Master_Transmit(&hi2c1,u8x8_GetI2CAddress(u8x8), buffer, buf_idx,0x100);//change it
+            break;
+        default:
+            return 0;
+    }
+    return 1;
 }
 
 uint8_t u8x8_byte_sw_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)

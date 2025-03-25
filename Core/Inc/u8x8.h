@@ -705,7 +705,7 @@ uint8_t u8x8_byte_ssd13xx_sw_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, voi
 uint8_t u8x8_byte_sw_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 uint8_t u8x8_byte_sed1520(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 
-
+uint8_t u8x8_byte_hw_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
 /*==========================================*/
 /* GPIO Interface */
 
@@ -1111,6 +1111,7 @@ uint8_t u8x8_DrawUTF8Lines(u8x8_t *u8x8, uint8_t x, uint8_t y, uint8_t w, const 
 /*==========================================*/
 
 /* u8x8_selection_list.c */
+
 struct _u8sl_struct
 {
   uint8_t visible;		/* number of visible elements in the menu */
@@ -1120,8 +1121,8 @@ struct _u8sl_struct
   
   uint8_t x;		/* u8x8 only, not used in u8g2 */
   uint8_t y;		/* u8x8 only, not used in u8g2 */
-};
-typedef struct _u8sl_struct u8sl_t;
+};typedef struct _u8sl_struct u8sl_t;
+
 
 typedef void (*u8x8_sl_cb)(u8x8_t *u8x8, u8sl_t *u8sl, uint8_t idx, const void *aux);
 

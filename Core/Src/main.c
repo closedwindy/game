@@ -24,16 +24,22 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "MPU6050.h"
+#include "u8g2.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+
+u8g2_t u8g2;
+
 
 /* USER CODE END PD */
 
@@ -50,6 +56,8 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+uint8_t u8g2_stm32_delay(U8X8_UNUSED u8x8_t *u8x8, U8X8_UNUSED uint8_t msg, U8X8_UNUSED uint8_t arg_int, U8X8_UNUSED void *arg_ptr);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -67,6 +75,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+int res;
 
   /* USER CODE END 1 */
 
@@ -90,7 +99,21 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C2_Init();
   MX_TIM2_Init();
+  MX_I2C1_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+res = MPU6050_DMP_Init();
+    HAL_Delay(200);
+    u8g2_Setup_ssd1306_i2c_128x64_noname_f(&u8g2,U8G2_R0,u8x8_byte_hw_i2c ,u8g2_stm32_delay);
+
+    u8g2_InitDisplay(&u8g2); // send init sequence to the display, display is in sleep mode after this,
+    u8g2_SetPowerSave(&u8g2, 0); // wake up display
+    u8g2_ClearDisplay(&u8g2);
+    u8g2_SetFont(&u8g2, u8g2_font_wqy16_t_chinese1);
+    u8g2_DrawBox(&u8g2,60,10,20,20);
+    u8g2_DrawUTF8(&u8g2,10,50,"hi,world");
+    u8g2_SendBuffer(&u8g2);
+
 
   /* USER CODE END 2 */
 
@@ -179,3 +202,19 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+uint8_t u8g2_stm32_delay(U8X8_UNUSED u8x8_t *u8x8, U8X8_UNUSED uint8_t msg, U8X8_UNUSED uint8_t arg_int, U8X8_UNUSED void *arg_ptr)
+{
+    switch(msg){
+
+        case U8X8_MSG_GPIO_AND_DELAY_INIT:
+            break;
+
+        case U8X8_MSG_DELAY_MILLI:
+            HAL_Delay(arg_int);//change it!
+            break;
+
+        default:
+            return 0;
+    }
+    return 1; // command processed successfully.
+}
