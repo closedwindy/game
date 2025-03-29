@@ -104,7 +104,7 @@ int res;
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
-
+res=MPU6050_DMP_Init();
 
     u8g2_t u8g2;
     u8g2Init(&u8g2);
@@ -115,14 +115,17 @@ int res;
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+char ss[10];
+ss[0]=res;
+      u8g2_SetFont(&u8g2, u8g2_font_ncenB08_te);
+      u8g2_DrawUTF8(&u8g2, 100, 8, "time");
+      u8g2_DrawUTF8(&u8g2, 100, 24, ss);
+
+      u8g2_SendBuffer(&u8g2);
+      u8g2_ClearBuffer(&u8g2);
     /* USER CODE END WHILE */
-      u8g2_FirstPage(&u8g2);
-      do
-      {
-          draw(&u8g2);
 
-
-      } while (u8g2_NextPage(&u8g2));
 
 
 

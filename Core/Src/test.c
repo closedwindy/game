@@ -2,7 +2,7 @@
 // Created by hhw on 2025/3/25.
 //
 #include "test.h"
-
+#include "stdio.h"
 //---------------U8g2测试函数
 
 #define SEND_BUFFER_DISPLAY_MS(u8g2, ms)\
@@ -76,6 +76,21 @@ void testDrawFrame(u8g2_t *u8g2)
     SEND_BUFFER_DISPLAY_MS(u8g2,t);
 }
 
+void testDrawsnake(u8g2_t *u8g2)
+{
+    int t = 1000;
+    int x = 16;
+    int y = 32;
+    int w = 50;
+    int h = 20;
+    u8g2_ClearBuffer(u8g2);
+    u8g2_DrawStr(u8g2,0, 15, "DrawFrame");
+    u8g2_DrawFrame(u8g2, x, y, w, h);
+    SEND_BUFFER_DISPLAY_MS(u8g2,t);
+    u8g2_DrawFrame(u8g2, x+w+5, y-10, w-20, h+20);
+    SEND_BUFFER_DISPLAY_MS(u8g2,t);
+}
+
 //画实心圆角矩形
 void testDrawRBox(u8g2_t *u8g2)
 {
@@ -124,7 +139,7 @@ void testDrawCircle(u8g2_t *u8g2)
 void testDrawFilledEllipse(u8g2_t *u8g2)
 {
     int t = 800;
-    int with = 16;//一个图块的间隔
+    int with = 16;  //一个图块的间隔
     int rx = 27;  //椭圆x方向的半径
     int ry = 22;  //椭圆y方向的半径
     u8g2_ClearBuffer(u8g2);
@@ -242,10 +257,10 @@ void u8g2DrawTest(u8g2_t *u8g2)
 {
     testDrawProcess(u8g2);
     testDrawMulti(u8g2);
-    //testDrawFrame(u8g2);
-    //testDrawRBox(u8g2);
-    //testDrawCircle(u8g2);
-    //testDrawFilledEllipse(u8g2);
+    testDrawFrame(u8g2);
+    testDrawRBox(u8g2);
+    testDrawCircle(u8g2);
+    testDrawFilledEllipse(u8g2);
     testShowFont(u8g2);
     testDrawXBM(u8g2);
 
