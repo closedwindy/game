@@ -1,8 +1,6 @@
 #include "stm32f10x.h"                  // Device header
 #include "bsp_OLED.h"
 #include "Snake.h"
-#include "bsp_Key.h"
-extern Snake mySnake;
 
 const int dir[4][2] = {
 	{0, -1},
@@ -33,15 +31,16 @@ void Snake_Init(Snake* snake)
 	snake->Snake[2].x = W / 2 - 2;
 	snake->Snake[2].y=H / 2 ;
 	snake->Time=200;
+	snake->GameOver=0;
 
 }
-void Snake_Tick(void)
+void Snake_Tick(Snake *snake)
 {
 	static int Count = 0;  // 使用静态变量来保存中断计数
 	Count++;
-	if (Count >=mySnake.Time)
+	if (Count >=snake->Time)
 	{
-    Remove (&mySnake );
+    Remove (snake );
 	Count=0;
 	}
 
@@ -71,7 +70,7 @@ void Random_Food(map* map, Snake* snake)
 				map->HasFood = true;
 				DrawUint(p.x ,p.y );
 				OLED_Update();
-				return;
+				break;
 			}
 		}
 	}
@@ -81,12 +80,31 @@ void Random_Food(map* map, Snake* snake)
 void Remove(Snake* snake)
 {
 	OLED_ClearArea((snake->Snake[snake->SnakeLength - 1].x)*4,(snake->Snake[snake->SnakeLength - 1].y)*4,4,4);
+	snake->Snake[0].x += dir[snake->SnakeDir][0];
+	snake->Snake[0].y += dir[snake->SnakeDir][1];
+	// 判断是否撞地图边界
+	if (snake->Snake[0].x >= W*4 || snake->Snake[0].y >= H||snake->Snake[0].x<=0||snake->Snake[0].y<=0)
+	{
+		snake->GameOver =1; // 蛇头越界，游戏结束
+	}
+	
+	if(snake->SnakeLength >=4)
+	{
+	for (int i = 1; i < snake->SnakeLength; i++)
+		{
+			if (snake->Snake[0].x == snake->Snake[i].x && snake->Snake[0].y == snake->Snake[i].y)
+			{
+				snake->GameOver =1; //判断是否撞到自己
+			}
+		}
+	
+	}
+	
 	for (int i = snake->SnakeLength - 1;i > 0;i--)
 	{
 		snake->Snake[i] = snake->Snake[i - 1];
 	}
-	snake->Snake[0].x += dir[snake->SnakeDir][0];
-	snake->Snake[0].y += dir[snake->SnakeDir][1];
+	
 	
 	DrawUint(snake->Snake[0].x, snake->Snake[0].y);
 	OLED_Update ();
@@ -110,10 +128,10 @@ void Remove(Snake* snake)
 	}
 
 }*/
-void Control_Dirction(Snake* snake)
+void Control_Dirction(Snake* snake,uint8_t KeyNum)
 {
-	uint8_t KeyNum=0;
-	KeyNum=Key_GetNum ();
+	if(KeyNum)
+	{
 	if(KeyNum==2)
 	{
 		 if (snake->SnakeDir != LEFT) 
@@ -142,6 +160,8 @@ void Control_Dirction(Snake* snake)
 		snake->SnakeDir= DOWN;
 		}
 	}
+	}
+	
 
 }
 void Map_Init(map* map)
@@ -173,23 +193,3 @@ void EatFood(map* map, Snake* snake)
 
 }
 
-bool Gameover(Snake* snake)
-{
-	// 判断是否撞地图边界
-	if (snake->Snake[0].x < 1 || snake->Snake[0].x >= W+1 || snake->Snake[0].y < 1 || snake->Snake[0].y >= H+1)
-	{
-		return true; // 蛇头越界，游戏结束
-	}
-
-	if (snake->SnakeLength >= 5)//蛇长度大于四才开始判断，防止一开始就进行错误判断
-	{
-		for (int i = 1; i < snake->SnakeLength; i++)
-		{
-			if (snake->Snake[0].x == snake->Snake[i].x && snake->Snake[0].y == snake->Snake[i].y)
-			{
-				return true; //判断是否撞到自己
-			}
-		}
-	}
-	return false; // 没有越界也没有撞到自身，游戏继续
-}

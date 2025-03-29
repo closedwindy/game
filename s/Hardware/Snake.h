@@ -35,20 +35,19 @@ typedef struct {
 	SnakeDirType SnakeDir;
 	uint8_t SnakeLength;
 	uint8_t Time;
-
+	uint8_t GameOver;
 }Snake;
 
 void Snake_Init(Snake* snake);
-void Snake_Tick(void);
+void Snake_Tick(Snake *snake);
 void drawUnit(Pos p, const char unit[]);
 //随机生成食物函数
 void Random_Food(map* map, Snake* snake);
 //蛇移动函数
 void Remove(Snake* snake);
 //控制蛇移动方向函数
-void Control_Dirction(Snake* snake);
+void Control_Dirction(Snake* snake,uint8_t KeyNum);
 void Map_Init(map* map);
 void EatFood(map* map, Snake* snake);
-bool Gameover(Snake* snake);
 
 #endif

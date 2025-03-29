@@ -33,4 +33,3 @@
 .\objects\snake.o: Hardware\Snake.h
 .\objects\snake.o: E:\Keil5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\snake.o: E:\Keil5\ARM\ARMCC\Bin\..\include\stdbool.h
-.\objects\snake.o: Hardware\bsp_Key.h

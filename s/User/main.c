@@ -18,11 +18,12 @@ int main (void)
 	
 	while (1)
 	{	
-		uint8_t KeyNum=Key_GetNum ();
+		uint8_t KeyNum=0;
+		KeyNum=Key_GetNum ();
 		EatFood(&myMap, &mySnake);
 		Random_Food(&myMap,&mySnake);
-		Control_Dirction(&mySnake);
-	if(Gameover (&mySnake))
+		Control_Dirction(&mySnake,KeyNum);
+	if(mySnake.GameOver)
 	{
 	OLED_Clear();
 	OLED_ShowString(32,24,"GameOver",OLED_8X16);
@@ -37,7 +38,7 @@ void TIM2_IRQHandler(void)
 	 
 	if(TIM_GetITStatus(TIM2,TIM_IT_Update)==SET)
 	{
-	Snake_Tick ();
+	Snake_Tick (&mySnake);
 	Key_Tick();
 	
 	    TIM_ClearITPendingBit(TIM2,TIM_IT_Update);
