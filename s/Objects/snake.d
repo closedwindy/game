@@ -28,8 +28,8 @@
 .\objects\snake.o: .\Library\stm32f10x_usart.h
 .\objects\snake.o: .\Library\stm32f10x_wwdg.h
 .\objects\snake.o: .\Library\misc.h
-.\objects\snake.o: Hardware\bsp_OLED.h
-.\objects\snake.o: Hardware\bsp_OLED_Data.h
+.\objects\snake.o: Hardware\OLED.h
+.\objects\snake.o: Hardware\OLED_Data.h
 .\objects\snake.o: Hardware\Snake.h
 .\objects\snake.o: E:\Keil5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\snake.o: E:\Keil5\ARM\ARMCC\Bin\..\include\stdbool.h

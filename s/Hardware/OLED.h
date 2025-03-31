@@ -2,7 +2,7 @@
 #define __OLED_H
 
 #include <stdint.h>
-#include "bsp_OLED_Data.h"
+#include "OLED_Data.h"
 
 /*参数宏定义*********************/
 
@@ -54,7 +54,6 @@ void OLED_DrawTriangle(uint8_t X0, uint8_t Y0, uint8_t X1, uint8_t Y1, uint8_t X
 void OLED_DrawCircle(uint8_t X, uint8_t Y, uint8_t Radius, uint8_t IsFilled);
 void OLED_DrawEllipse(uint8_t X, uint8_t Y, uint8_t A, uint8_t B, uint8_t IsFilled);
 void OLED_DrawArc(uint8_t X, uint8_t Y, uint8_t Radius, int16_t StartAngle, int16_t EndAngle, uint8_t IsFilled);
-void BootAnimation(void);
 
 /*********************函数声明*/
 

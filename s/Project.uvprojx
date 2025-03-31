@@ -676,36 +676,6 @@
           <GroupName>Hardware</GroupName>
           <Files>
             <File>
-              <FileName>LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Hardware\LED.c</FilePath>
-            </File>
-            <File>
-              <FileName>LED.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Hardware\LED.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_OLED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Hardware\bsp_OLED.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_OLED.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Hardware\bsp_OLED.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_OLED_Data.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Hardware\bsp_OLED_Data.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_OLED_Data.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Hardware\bsp_OLED_Data.h</FilePath>
-            </File>
-            <File>
               <FileName>Snake.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Hardware\Snake.c</FilePath>
@@ -724,6 +694,26 @@
               <FileName>bsp_Key.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Hardware\bsp_Key.h</FilePath>
+            </File>
+            <File>
+              <FileName>OLED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\OLED.c</FilePath>
+            </File>
+            <File>
+              <FileName>OLED.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\OLED.h</FilePath>
+            </File>
+            <File>
+              <FileName>OLED_Data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\OLED_Data.c</FilePath>
+            </File>
+            <File>
+              <FileName>OLED_Data.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\OLED_Data.h</FilePath>
             </File>
           </Files>
         </Group>

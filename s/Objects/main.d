@@ -29,8 +29,8 @@
 .\objects\main.o: .\Library\stm32f10x_wwdg.h
 .\objects\main.o: .\Library\misc.h
 .\objects\main.o: .\System\Delay.h
-.\objects\main.o: .\Hardware\bsp_OLED.h
-.\objects\main.o: .\Hardware\bsp_OLED_Data.h
+.\objects\main.o: .\Hardware\OLED.h
+.\objects\main.o: .\Hardware\OLED_Data.h
 .\objects\main.o: .\Hardware\Snake.h
 .\objects\main.o: E:\Keil5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\main.o: E:\Keil5\ARM\ARMCC\Bin\..\include\stdbool.h

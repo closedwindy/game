@@ -19,7 +19,7 @@
   */
 
 #include "stm32f10x.h"
-#include "bsp_OLED.h"
+#include "OLED.h"
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
@@ -1399,78 +1399,5 @@ void OLED_DrawArc(uint8_t X, uint8_t Y, uint8_t Radius, int16_t StartAngle, int1
 /*********************功能函数*/
 
 
-/*****************江协科技|版权所有****************/// 定义箭头的形状
-// 定义左右方向的箭头形状（宽度为 64 像素）
-
-// 定义左右方向的箭头形状（放大版）
-void DrawArrow(uint8_t x, uint8_t y, uint8_t direction) {
-    if (direction == 0) { // 向左的箭头
-        OLED_DrawLine(x, y, x + 20, y);          // 水平线（放大到 20 像素）
-        OLED_DrawLine(x, y, x + 10, y - 10);     // 上斜线（放大到 10 像素）
-        OLED_DrawLine(x, y, x + 10, y + 10);     // 下斜线（放大到 10 像素）
-    } else if (direction == 1) { // 向右的箭头
-        OLED_DrawLine(x, y, x - 20, y);          // 水平线（放大到 20 像素）
-        OLED_DrawLine(x, y, x - 10, y - 10);     // 上斜线（放大到 10 像素）
-        OLED_DrawLine(x, y, x - 10, y + 10);     // 下斜线（放大到 10 像素）
-    }
-}
-
-// 清除箭头的形状（放大版）
-void ClearArrow(uint8_t x, uint8_t y, uint8_t direction) {
-    if (direction == 0) { // 向左的箭头
-        OLED_DrawLine(x, y, x + 20, y);          // 水平线（放大到 20 像素）
-        OLED_DrawLine(x, y, x + 10, y - 10);     // 上斜线（放大到 10 像素）
-        OLED_DrawLine(x, y, x + 10, y + 10);     // 下斜线（放大到 10 像素）
-    } else if (direction == 1) { // 向右的箭头
-        OLED_DrawLine(x, y, x - 20, y);          // 水平线（放大到 20 像素）
-        OLED_DrawLine(x, y, x - 10, y - 10);     // 上斜线（放大到 10 像素）
-        OLED_DrawLine(x, y, x - 10, y + 10);     // 下斜线（放大到 10 像素）
-    }
-}
-
-// 开机动画
-void BootAnimation(void) {
-    uint8_t x1 = 64;  // 第一个箭头的初始X坐标（屏幕中央）
-    uint8_t y1 = 32;  // 第一个箭头的初始Y坐标（屏幕中央）
-    uint8_t x2 = 64;  // 第二个箭头的初始X坐标（屏幕中央）
-    uint8_t y2 = 32;  // 第二个箭头的初始Y坐标（屏幕中央）
-
-    // 初始化OLED
-    OLED_Init();
-    OLED_Clear();
-
-    // 动画循环
-    while (1) {
-		 OLED_Clear();
-        // 清除上一帧的箭头
-        ClearArrow(x1, y1, 0); // 清除向左的箭头
-        ClearArrow(x2, y2, 1); // 清除向右的箭头
-
-        // 更新箭头的位置
-        x1 -= 2;  // 第一个箭头向左移动
-        x2 += 2;  // 第二个箭头向右移动
-
-        // 绘制新的箭头
-        DrawArrow(x1, y1, 0); // 绘制向左的箭头
-        DrawArrow(x2, y2, 1); // 绘制向右的箭头
-
-        // 更新屏幕显示
-        OLED_Update();
-
-        // 延时，控制动画速度
-        for (volatile int i = 0; i < 100000; i++);
-
-        // 如果箭头移出屏幕，退出循环
-        if (x1 < 0 || x2 > 127) {
-            break;
-        }
-    }
-
-    // 清除屏幕
-   
-    OLED_Update();
-}
-
-
+/*****************江协科技|版权所有****************/
 /*****************jiangxiekeji.com*****************/
-
