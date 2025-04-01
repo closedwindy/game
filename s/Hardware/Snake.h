@@ -47,9 +47,11 @@ void drawUnit(Pos p, const char unit[]);
 void Random_Food(map* map, Snake* snake);
 void Remove(Snake* snake);
 void My_Remove(Snake* snake);
+
 void Auto_Control_Dirction(Snake* snake, map* map);
 void My_Control_Dirction(Snake* snake,uint8_t KeyNum);
 void Map_Init(map* map);
-void EatFood(map* map, Snake* snake);
+//void EatFood(map* map, Snake* snake);
+void EatFood(map* map, Snake* snake,int *point);
 
 #endif

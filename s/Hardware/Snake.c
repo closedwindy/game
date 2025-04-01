@@ -37,10 +37,14 @@ void My_Snake_Init(Snake* snake)
 //人机初始化
 void Robot_Snake_Init(Snake* snake)
 {
-	snake->SnakeLength = 1;
+	snake->SnakeLength = 3;
 	snake->SnakeDir = LEFT;
 	snake->Snake[0].x=4;
 	snake->Snake[0].y=4;
+	snake->Snake[1].x=3;
+	snake->Snake[1].y=4;
+	snake->Snake[1].x=2;
+	snake->Snake[1].y=4;
 	snake->Time=200;
 }
 //蛇刷新
@@ -93,7 +97,7 @@ void Random_Food(map* map, Snake* snake)
 				map->HasFood = true;
 				map->Food_Pos = p;
 				DrawUint(p.x ,p.y );
-				OLED_Update();
+				OLED_Update ();
 				break;
 			}
 		}
@@ -223,33 +227,12 @@ void My_Control_Dirction(Snake* snake,uint8_t KeyNum)
 {
 	if(KeyNum)
 	{
-	if(KeyNum==2)
+	switch (KeyNum )
 	{
-		 if (snake->SnakeDir != LEFT) 
-		{ 
-		snake->SnakeDir = RIGHT;
-		}
-	}
-		if(KeyNum==3)
-	{
-		 if (snake->SnakeDir != DOWN) 
-		{ 
-		snake->SnakeDir = UP;
-		}
-	}
-	if(KeyNum==4)
-	{
-		 if (snake->SnakeDir!= RIGHT) 
-		{ 
-		snake->SnakeDir = LEFT;
-		}
-	}
-		if(KeyNum==1)
-	{
-		 if (snake->SnakeDir!= UP) 
-		{ 
-		snake->SnakeDir= DOWN;
-		}
+		case 1:if(snake->SnakeDir !=UP)snake->SnakeDir=DOWN;break;
+		case 2:if(snake->SnakeDir !=LEFT)snake->SnakeDir=RIGHT;break;
+		case 3:if(snake->SnakeDir !=DOWN)snake->SnakeDir=UP;break;
+		case 4:if(snake->SnakeDir !=RIGHT)snake->SnakeDir=LEFT;break;
 	}
 	}
 	
@@ -269,7 +252,7 @@ void Map_Init(map* map)
 	map->HasFood = false;
 }
 //吃食物函数
-void EatFood(map* map, Snake* snake)
+void EatFood(map* map, Snake* snake,int *point)
 {
 	if (map->map_pos[snake->Snake[0].y][snake->Snake[0].x] == FOOD)
 	{
@@ -279,7 +262,7 @@ void EatFood(map* map, Snake* snake)
 
 		map->map_pos[snake->Snake[0].y][snake->Snake[0].x] = EMPTY;
 		map->HasFood = false;
-		//Random_Food(map, snake);
+		(*point)++;
 		Random_Food(map, snake);
 	}
 

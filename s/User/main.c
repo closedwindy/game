@@ -12,6 +12,8 @@ int main (void)
 {
 	
 	uint8_t KeyNum=0;
+	int My_point=0;
+	int Robot_point=0;
 	OLED_Init();
 	Timer_Init ();
 	Robot_Snake_Init(&RobotSnake);
@@ -23,11 +25,13 @@ int main (void)
 	while (1)
 	{	
 		KeyNum=Key_GetNum ();
-		EatFood(&myMap, &mySnake);
-		EatFood(&myMap, &RobotSnake);
+		EatFood(&myMap, &mySnake,&My_point);
+		EatFood(&myMap, &RobotSnake,&Robot_point);
 		Random_Food(&myMap,&RobotSnake);
 		Auto_Control_Dirction(&RobotSnake, &myMap);
 		My_Control_Dirction(&mySnake,KeyNum );
+		OLED_ShowNum(1,1,My_point ,5,OLED_6X8);
+		OLED_Update();
 	if(mySnake.GameOver)
 	{
 	OLED_Clear();
