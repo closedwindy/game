@@ -20,6 +20,7 @@
 #include "main.h"
 #include "i2c.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -28,6 +29,9 @@
 #include "u8g2.h"
 #include "stm32_u8g2.h"
 #include "Snake.h"
+#include "menu.h"
+#include "string.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,8 +54,11 @@
 /* USER CODE BEGIN PV */
 Snake mySnake;
 map myMap;
-static int z=0;
+int desktop=0;
+int z=0,s=0,_TEMP=0,w=0,difficult=0,_CLEAR=1;
+int mode =0;
 u8g2_t u8g2;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -62,7 +69,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int f;
 /* USER CODE END 0 */
 
 /**
@@ -73,10 +80,15 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-    char res;
-    char ss[1];
 
-  /* USER CODE END 1 */
+    //Desktop1_direction=126;
+
+
+
+
+
+
+    /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -100,14 +112,16 @@ int main(void)
   MX_I2C2_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 
       MPU6050_Init();
 
     HAL_TIM_Base_Start_IT(&htim2);
-    ss[0]=res;
+
 
     u8g2Init(&u8g2);
+    OPENUI(&u8g2);
     Snake_Init(&mySnake);
     Map_Init(&myMap);
   /* USER CODE END 2 */
@@ -116,34 +130,89 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-      Random_Food(&myMap,&mySnake);
-      Control_Dirction(&mySnake);
-      MPU6050_Read_Result();
+      if(w>=32){
+          w=32;
+      }
+      if(w<=0)
+      {
+          w=0;
+      }
+    if(roll>10&&desktop!=4)
+    {
+     mode = 1;
+
+    }
+    if(roll>-10&&roll<10)
+    {
+        mode =0;
+    }
+if(roll<-10)
+    {
+         mode = 2;
+    }
+      if(pitch<-30)
+      { if((Desktop1_direction==42||Desktop1_direction==-84)&&desktop!=4)
+          {
+              desktop = 1;
+          }
+          if(Desktop1_direction==84||Desktop1_direction==-42)
+          {
+              _TEMP=1;
+              if(_CLEAR==1)
+              {
+                  u8g2_ClearBuffer(&u8g2);
+                  _CLEAR=0;
+              }
+              desktop=4;
+          }
+      }
+      if(pitch>30&&desktop!=4)
+      {
+          desktop=0;
+      }
+
+      switch(desktop)
+      {
+          case 0:
+              Desktop1();
+              break;
+          case 1:
+              Desktop2_SET(w);
+              break;
+          case 2:
+              HELL();
+          case 3:;
+              break;
+      }
+
+
+//      Random_Food(&myMap,&mySnake);
+//      MPU6050_Read_Result();
+//      Control_Dirction(&mySnake,roll,pitch);
       u8g2_SetFont(&u8g2, u8g2_font_ncenB08_te);
-      u8g2_DrawUTF8(&u8g2, 50, z, "fuck");
-//      Ay=Ay*100;
-//      Ax=Ax*100;
-//      Az=Az*100;
 
 
 
 
+//if(z==2) {
+//    u8g2_DrawFrame(&u8g2, 0, 0, 128, 64);
+//    u8g2_SendBuffer(&u8g2);
+//}
 
-//      PrintVarFormat(&u8g2, 0, 50,u8g2_font_ncenB08_te,Ay);
-//      PrintVarFormat(&u8g2, 10, 40,u8g2_font_ncenB08_te,Ax);
-//      PrintVarFormat(&u8g2, 20, 30,u8g2_font_ncenB08_te,Az);
-//      PrintVarFormat(&u8g2, 30, 60,u8g2_font_ncenB08_te,yaw);
-//      PrintVarFormat(&u8g2, 50, 60,u8g2_font_ncenB08_te,roll);
-//      PrintVarFormat(&u8g2, 70, 60,u8g2_font_ncenB08_te,pitch);
-
-    u8g2_SendBuffer(&u8g2);
-
+if(_TEMP==1)
+{
+    Random_Food(&myMap,&mySnake);
+    Control_Dirction(&mySnake);
+}
 
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
+
+
+
   /* USER CODE END 3 */
 }
 
@@ -194,19 +263,59 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-  if(htim->Instance==TIM2)
-  {
-      z++;
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    if (htim->Instance == TIM2) {
+        f++;
+        z++;
 
-      if(z==5)
-      {
-          Remove(&mySnake);
-          z=0;
-      }
-  }
+        if (f > 50) {
+            MPU6050_Read_Result();
+        }
+        if (_TEMP == 1) {
+            s+=4;
+            switch (w/16) {
+                case 0:
+                    if (s == 24) {
+                        Remove(&mySnake);
+                        s = 0;
+                    }
+                    break;
+                case 1:
+                    if (s == 16) {
+                        Remove(&mySnake);
+                        s = 0;
+                    }
+                    break;
+                case 2:
+                    if (s == 8) {
+                        Remove(&mySnake);
+                        s = 0;
+                    }
+                    break;
+            }
+
+
+        }
+
+
+        if (z == 5) {
+            switch (mode) {
+                case 1:
+                    if (desktop == 0) { Desktop1_direction += 42; }
+                    if (desktop == 1) { w -= 16; }
+                    break;
+                case 2:
+                    if (desktop == 0) { Desktop1_direction -= 42; }
+                    if (desktop == 1) { w += 16; }
+                    break;
+            }
+////          Remove(&mySnake);
+
+            z = 0;
+        }
+    }
 }
+
 /* USER CODE END 4 */
 
 /**

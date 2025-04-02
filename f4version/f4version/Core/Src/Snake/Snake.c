@@ -119,30 +119,30 @@ u8g2_cleararea(&u8g2,(snake->Snake[snake->SnakeLength - 1].x)*4,(snake->Snake[sn
 }*/
 void Control_Dirction(Snake* snake)
 {
-    uint8_t KeyNum=0;
+
 MPU6050_Read_Result();
-    if(roll>=30)
+    if(roll>=10)
     {
         if (snake->SnakeDir != LEFT)
         {
             snake->SnakeDir = RIGHT;
         }
     }
-    if(pitch>=30)
+    if(pitch>=10)
     {
         if (snake->SnakeDir != DOWN)
         {
             snake->SnakeDir = UP;
         }
     }
-    if(roll>=30)
+    if(roll>=10)
     {
         if (snake->SnakeDir!= RIGHT)
         {
             snake->SnakeDir = LEFT;
         }
     }
-    if(pitch>=30)
+    if(pitch>=10)
     {
         if (snake->SnakeDir!= UP)
         {

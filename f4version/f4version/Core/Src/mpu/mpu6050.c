@@ -33,32 +33,26 @@ void MPU6050_Init(void)//初始化
 	uint8_t Data;
 
 	HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, WHO_AM_I_REG, 1, &check, 1, 1000);
-	//注意。我的板子I2C1给显示屏了，所以给陀螺仪的是I2C2，故用&hi2c1
 
-	if (check == 0x68)//寄存器文档最后一页写了WHO_AM_I_REG就是0x68
+	if (check == 0x68)
 	{
-		//电源管理1
+
 		Data = 0x01;
 		HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, PWR_MGMT_1_REG, 1, &Data, 1, 1000);
 
-		//电源管理2
+
 		Data = 0x00;
 		HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, PWR_MGMT_2_REG, 1, &Data, 1, 1000);
 
-		//滤波
 		Data = 0x06;
 		HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, CONFIG, 1, &Data, 1, 1000);
 
-
-		//采样频率分频器寄存器
 		Data = 0x09;
 		HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, SMPLRT_DIV_REG, 1, &Data, 1, 1000);
 
-		//加速度计配置
 		Data = 0x18;
 		HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, ACCEL_CONFIG_REG, 1, &Data, 1, 1000);
 
-		//陀螺仪配置
 		Data = 0x18;
 		HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, GYRO_CONFIG_REG, 1, &Data, 1, 1000);
 	}

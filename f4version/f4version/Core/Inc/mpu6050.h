@@ -27,7 +27,8 @@ void MPU6050_Read_Result(void);//读roll, pitch, yaw
 
 
 //导出，导出后数据才能被其他程序应用
-extern float Ax, Ay, Az, Gx, Gy, Gz,roll, pitch, yaw;//A代表加速度，G代表角速度
+extern float Ax, Ay, Az, Gx, Gy, Gz;
+extern float roll, pitch, yaw;//A代表加速度，G代表角速度
 
 
 
