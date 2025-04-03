@@ -55,10 +55,12 @@
 Snake mySnake;
 map myMap;
 int desktop=0;
-int z=0,s=0,_TEMP=0,w=0,difficult=0,_CLEAR=1;
+int z=0,s=0,_TEMP=0,w=0,difficult=0,_CLEAR=1,t=0,q=0,normal=0;
 int mode =0;
 u8g2_t u8g2;
-
+Snake RobotSnake;
+int Robot_point =0;
+int My_point=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -120,8 +122,10 @@ int main(void)
     HAL_TIM_Base_Start_IT(&htim2);
 
 
+
     u8g2Init(&u8g2);
     OPENUI(&u8g2);
+    Robot_Snake_Init(&RobotSnake);
     Snake_Init(&mySnake);
     Map_Init(&myMap);
   /* USER CODE END 2 */
@@ -130,6 +134,19 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+      EatFood(&myMap, &RobotSnake,&My_point);
+
+
+      if(mySnake.GameOver) {
+          u8g2_SetFont(&u8g2,u8g2_font_ncenB08_te);
+          u8g2_ClearBuffer(&u8g2);
+          u8g2_DrawStr(&u8g2,32, 24, "GameOver");
+          u8g2_SendBuffer(&u8g2);
+      }
+      EatFood(&myMap,&mySnake,&My_point);
+
+
       if(w>=32){
           w=32;
       }
@@ -162,6 +179,18 @@ if(roll<-10)
               {
                   u8g2_ClearBuffer(&u8g2);
                   _CLEAR=0;
+                  normal=1;
+              }
+              desktop=4;
+          }
+          if(Desktop1_direction==0||Desktop1_direction==126)
+          {
+              _TEMP=1;
+              if(_CLEAR==1)
+              {
+                  u8g2_ClearBuffer(&u8g2);
+                  _CLEAR=0;
+                  difficult=1;
               }
               desktop=4;
           }
@@ -180,7 +209,8 @@ if(roll<-10)
               Desktop2_SET(w);
               break;
           case 2:
-              HELL();
+              _TEMP=1;
+              t=1;
           case 3:;
               break;
       }
@@ -202,7 +232,8 @@ if(roll<-10)
 if(_TEMP==1)
 {
     Random_Food(&myMap,&mySnake);
-    Control_Dirction(&mySnake);
+
+    PrintVarFormat(&u8g2,8,13,u8g2_font_8x13B_tr, My_point);
 }
 
 
@@ -268,32 +299,62 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
         f++;
         z++;
 
-        if (f > 50) {
+        if(_TEMP==1&&q==1) {
+            t++;
+
+            if (t == 10) {
+                Auto_Control_Dirction(&mySnake,&myMap);
+                MyRemove( &mySnake);
+                RobotRemove(&RobotSnake);
+                Control_Dirction(&mySnake);
+
+                t=0;
+            }
+        }
+        if (f > 30) {
             MPU6050_Read_Result();
         }
         if (_TEMP == 1) {
             s+=4;
-            switch (w/16) {
-                case 0:
-                    if (s == 24) {
-                        Remove(&mySnake);
-                        s = 0;
-                    }
-                    break;
-                case 1:
-                    if (s == 16) {
-                        Remove(&mySnake);
-                        s = 0;
-                    }
-                    break;
-                case 2:
-                    if (s == 8) {
-                        Remove(&mySnake);
-                        s = 0;
-                    }
-                    break;
+            if(difficult==1) {
+                if(s==16)
+                {
+                    Auto_Control_Dirction(&RobotSnake,&myMap);
+                    RobotRemove(&RobotSnake);
+                    MyRemove(&mySnake);
+                    Control_Dirction(&mySnake);
+                    s=0;
+                }
+
             }
 
+            if(normal==1) {
+                switch (w / 16) {
+                    case 0:
+                        if (s == 24) {
+                            MyRemove(&mySnake);
+                            s = 0;
+                            Control_Dirction(&mySnake);
+                        }
+                        break;
+                    case 1:
+                        if (s == 16) {
+                            MyRemove(&mySnake);
+                            s = 0;
+                            Control_Dirction(&mySnake);
+                        }
+                        break;
+                    case 2:
+                        if (s == 8) {
+                            MyRemove(&mySnake);
+                            s = 0;
+                            Control_Dirction(&mySnake);
+                        }
+
+
+                        break;
+                }
+            }
 
         }
 
@@ -313,6 +374,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 
             z = 0;
         }
+    }
+    if (htim->Instance == TIM3){
+
+
     }
 }
 

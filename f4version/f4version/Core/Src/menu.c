@@ -2,7 +2,12 @@
 #include "bmp.h"
 #include <stdio.h>
 #include <string.h>
-
+#include "Snake.h"
+extern Snake mySnake;
+extern map myMap;
+extern  Snake RobotSnake;
+extern int Robot_point ;
+extern  int My_point;
 int Desktop1_direction=0;
 int Desktop1_x=0,Desktop1_y=0;
 
@@ -160,14 +165,10 @@ void Desktop2_SET(int direction)
 //}
 void HELL(void)
 {
-    u8g2_SetDrawColor(&u8g2,1);
-    u8g2_ClearBuffer(&u8g2);
 
-    u8g2_SetFont(&u8g2, u8g2_font_8x13B_tr);
-    u8g2_DrawStr(&u8g2,0,16,"LMotorV:");
-    u8g2_DrawStr(&u8g2,0,32,"RMotorV:");
 
-    u8g2_SendBuffer(&u8g2);
+
+
 
 }
 
