@@ -28,6 +28,7 @@ typedef struct{
 typedef struct{
     BlockType map_pos[W][H];
     bool HasFood;
+    Pos Food_Pos;
 
 }map;
 typedef struct {
@@ -35,7 +36,7 @@ typedef struct {
     SnakeDirType SnakeDir;
     uint8_t SnakeLength;
     uint8_t Time;
-
+    uint8_t GameOver;
 }Snake;
 
 void Snake_Init(Snake* snake);
@@ -46,11 +47,14 @@ void drawUnit(Pos p, const char unit[]);
 //????????????
 void Random_Food(map* map, Snake* snake);
 //?????????
-void Remove(Snake* snake);
+void MyRemove(Snake* snake);
 //???????????????
 void Control_Dirction(Snake* snake);
 void Map_Init(map* map);
-void EatFood(map* map, Snake* snake);
+void EatFood(map* map, Snake* snake,int *point);
 bool Gameover(Snake* snake);
-
+void Robot_Snake_Init(Snake* snake);
+void Robot_Snake_Tick(Snake *snake);
+void Auto_Control_Dirction(Snake* snake, map* map);
+void RobotRemove(Snake* snake);
 #endif

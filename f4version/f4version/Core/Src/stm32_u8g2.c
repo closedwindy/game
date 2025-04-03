@@ -182,3 +182,25 @@ void u8g2_cleararea(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t w, uint8_t h) {
     u8g2_DrawBox(u8g2, x, y, w, h);
     u8g2_SetDrawColor(u8g2, 1);
 };
+void OPENUI(u8g2_t *u8g2)
+{
+    for(int i=10;i<=80;i=i+1)
+    {
+        u8g2_ClearBuffer(u8g2);
+
+        char buff[20];
+        sprintf(buff,"%d%%",(int)(i/80.0*100));
+
+        u8g2_SetFont(u8g2,u8g2_font_ncenB12_tf);
+        u8g2_DrawStr(u8g2,4,32,"GAME LOAD...");
+
+        u8g2_SetFont(u8g2,u8g2_font_ncenB08_tf);
+        u8g2_DrawStr(u8g2,100,49,buff);
+
+        u8g2_DrawRBox(u8g2,16,40,i,10,4);
+        u8g2_DrawRFrame(u8g2,16,40,80,10,4);
+
+        u8g2_SendBuffer(u8g2);
+    }
+
+}

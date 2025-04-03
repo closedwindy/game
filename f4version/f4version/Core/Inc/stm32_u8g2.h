@@ -31,5 +31,7 @@ void testDrawPixelToFillScreen(u8g2_t *u8g2);
 void PrintVarFormat(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, const uint8_t *font, int var);
 void PrintfloatFormat(u8g2_t *u8g2, u8g2_uint_t x, u8g2_uint_t y, const uint8_t *font, const char *format, float var);
 void u8g2_cleararea(u8g2_t *u8g2, uint8_t x, uint8_t y, uint8_t w, uint8_t h);
+void OPENUI(u8g2_t *u8g2);
+
 
 #endif
