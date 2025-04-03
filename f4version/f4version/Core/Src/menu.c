@@ -2,12 +2,11 @@
 #include "bmp.h"
 #include <stdio.h>
 #include <string.h>
-#include "Snake.h"
-extern Snake mySnake;
-extern map myMap;
-extern  Snake RobotSnake;
-extern int Robot_point ;
-extern  int My_point;
+
+
+
+
+
 int Desktop1_direction=0;
 int Desktop1_x=0,Desktop1_y=0;
 

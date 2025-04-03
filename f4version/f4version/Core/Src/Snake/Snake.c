@@ -55,6 +55,7 @@ void Snake_Tick(Snake* snake)
 }
 
 //????????????
+//随机生成食物函数
 void Random_Food(map* map, Snake* snake)
 {
     if (!map->HasFood)
@@ -67,7 +68,7 @@ void Random_Food(map* map, Snake* snake)
             p.y = rand() % H;
             for (i = 0; i < snake->SnakeLength; ++i)
             {
-                if (p.x == snake->Snake[i].x && p.y == snake->Snake[i].y || p.x == W || p.y == H || p.x == 0 || p.y == 0)
+                if ((p.x == snake->Snake[i].x && p.y == snake->Snake[i].y) || p.x == W || p.y == H || p.x == 0 || p.y == 0)
                 {
                     break;
                 }
@@ -76,9 +77,10 @@ void Random_Food(map* map, Snake* snake)
             {
                 map->map_pos[p.y][p.x] =FOOD;
                 map->HasFood = true;
+                map->Food_Pos = p;
                 DrawUint(p.x ,p.y );
                 u8g2_SendBuffer(&u8g2);
-                return;
+                break;
             }
         }
     }
@@ -299,7 +301,7 @@ void Auto_Control_Dirction(Snake* snake, map* map)
     int dx=Food_Pos .x -snake->Snake [0].x;
     int dy=Food_Pos .y -snake->Snake [0].y;
 
-    if(abs(dx)>abs(dy))//如果水平方向离食物更近
+    if(abs(dx)>=abs(dy))//如果水平方向离食物更近
     {
         if(dx>0)
         {
@@ -326,16 +328,16 @@ void Auto_Control_Dirction(Snake* snake, map* map)
 //吃食物函数
 void EatFood(map* map, Snake* snake,int *point)
 {
-    if (map->map_pos[snake->Snake[0].y][snake->Snake[0].x] == FOOD)
-    {
-        snake->SnakeLength++;
-        Pos previousBody = snake->Snake[snake->SnakeLength - 2];
-        snake->Snake[snake->SnakeLength - 1] = previousBody;
+	if (map->map_pos[snake->Snake[0].y][snake->Snake[0].x] == FOOD)
+	{
+		snake->SnakeLength++;
+		Pos previousBody = snake->Snake[snake->SnakeLength - 2];
+		snake->Snake[snake->SnakeLength - 1] = previousBody;
 
-        map->map_pos[snake->Snake[0].y][snake->Snake[0].x] = EMPTY;
-        map->HasFood = false;
-        (*point)++;
-        Random_Food(map, snake);
-    }
+		map->map_pos[snake->Snake[0].y][snake->Snake[0].x] = EMPTY;
+		map->HasFood = false;
+		(*point)++;
+		Random_Food(map, snake);
+	}
 
 }

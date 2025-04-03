@@ -134,9 +134,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+      Auto_Control_Dirction(&RobotSnake,&myMap);
       EatFood(&myMap, &RobotSnake,&My_point);
-
+      EatFood(&myMap,&mySnake,&My_point);
 
       if(mySnake.GameOver) {
           u8g2_SetFont(&u8g2,u8g2_font_ncenB08_te);
@@ -144,7 +144,7 @@ int main(void)
           u8g2_DrawStr(&u8g2,32, 24, "GameOver");
           u8g2_SendBuffer(&u8g2);
       }
-      EatFood(&myMap,&mySnake,&My_point);
+
 
 
       if(w>=32){
@@ -303,10 +303,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
             t++;
 
             if (t == 10) {
-                Auto_Control_Dirction(&mySnake,&myMap);
+                Control_Dirction(&mySnake);
                 MyRemove( &mySnake);
                 RobotRemove(&RobotSnake);
-                Control_Dirction(&mySnake);
+
 
                 t=0;
             }
@@ -319,7 +319,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
             if(difficult==1) {
                 if(s==16)
                 {
-                    Auto_Control_Dirction(&RobotSnake,&myMap);
+
                     RobotRemove(&RobotSnake);
                     MyRemove(&mySnake);
                     Control_Dirction(&mySnake);
@@ -334,6 +334,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
                         if (s == 24) {
                             MyRemove(&mySnake);
                             s = 0;
+                            RobotRemove(&RobotSnake);
                             Control_Dirction(&mySnake);
                         }
                         break;
