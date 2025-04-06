@@ -55,8 +55,9 @@
 Snake mySnake;
 map myMap;
 int desktop=0;
-int z=0,s=0,_TEMP=0,w=0,difficult=0,_CLEAR=1,t=0,q=0,normal=0;
-int mode =0;
+int z=0,s=0,_TEMP=0,w=0,difficult=0,_CLEAR=1,t=0,q=0,normal=0,prop_use=0;
+
+int mode =0,time=0;
 u8g2_t u8g2;
 Snake RobotSnake;
 int Robot_point =0;
@@ -90,7 +91,7 @@ int main(void)
 
 
 
-    /* USER CODE END 1 */
+  /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -115,18 +116,20 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_USART3_UART_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
       MPU6050_Init();
 
     HAL_TIM_Base_Start_IT(&htim2);
+    HAL_TIM_Base_Start_IT(&htim3);
 
 
 
     u8g2Init(&u8g2);
     OPENUI(&u8g2);
     Robot_Snake_Init(&RobotSnake);
-    Snake_Init(&mySnake);
+    My_Snake_Init(&mySnake);
     Map_Init(&myMap);
   /* USER CODE END 2 */
 
@@ -134,7 +137,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-      Auto_Control_Dirction(&RobotSnake,&myMap);
+
       EatFood(&myMap, &RobotSnake,&My_point);
       EatFood(&myMap,&mySnake,&My_point);
 
@@ -190,7 +193,7 @@ if(roll<-10)
               {
                   u8g2_ClearBuffer(&u8g2);
                   _CLEAR=0;
-                  difficult=1;
+difficult=1;
               }
               desktop=4;
           }
@@ -210,7 +213,7 @@ if(roll<-10)
               break;
           case 2:
               _TEMP=1;
-              t=1;
+   break;
           case 3:;
               break;
       }
@@ -229,12 +232,18 @@ if(roll<-10)
 //    u8g2_SendBuffer(&u8g2);
 //}
 
-if(_TEMP==1)
-{
-    Random_Food(&myMap,&mySnake);
-
-    PrintVarFormat(&u8g2,8,13,u8g2_font_8x13B_tr, My_point);
-}
+      if(_TEMP==1&&normal==1)
+      {
+          Random_Foodandprop(&myMap,&mySnake);
+          PrintVarFormat(&u8g2,88,13,u8g2_font_8x13B_tr, time);
+          PrintVarFormat(&u8g2,120,13,u8g2_font_8x13B_tr, My_point);
+      }
+      if(_TEMP==1&&difficult==1)
+      {     Random_Food(&myMap,&RobotSnake);
+          Random_Food(&myMap,&mySnake);
+          PrintVarFormat(&u8g2,88,13,u8g2_font_8x13B_tr, time);
+          PrintVarFormat(&u8g2,120,13,u8g2_font_8x13B_tr, My_point);
+      }
 
 
     /* USER CODE END WHILE */
@@ -298,19 +307,102 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (htim->Instance == TIM2) {
         f++;
         z++;
-
-        if(_TEMP==1&&q==1) {
-            t++;
-
-            if (t == 10) {
-                Control_Dirction(&mySnake);
-                MyRemove( &mySnake);
-                RobotRemove(&RobotSnake);
+if (prop_use==1) {
+    s+=(int)yaw;
+    t+=(int)yaw;
 
 
-                t=0;
-            }
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    prop_use=0;
+}
+
         if (f > 30) {
             MPU6050_Read_Result();
         }
@@ -319,11 +411,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
             if(difficult==1) {
                 if(s==16)
                 {
-
+                    Auto_Control_Dirction(&RobotSnake,&myMap);
                     RobotRemove(&RobotSnake);
                     MyRemove(&mySnake);
                     Control_Dirction(&mySnake);
                     s=0;
+
                 }
 
             }
@@ -331,10 +424,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
             if(normal==1) {
                 switch (w / 16) {
                     case 0:
-                        if (s == 24) {
+                        if (mySnake.IsSlowDown==1) {
+                            s+=yaw/4;
+                        }
+                        if (s >= 24) {
                             MyRemove(&mySnake);
                             s = 0;
-                            RobotRemove(&RobotSnake);
+
                             Control_Dirction(&mySnake);
                         }
                         break;
@@ -376,8 +472,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
             z = 0;
         }
     }
-    if (htim->Instance == TIM3){
 
+
+    if (htim->Instance == TIM3){
+if (_TEMP==1)
+        {
+            time+=1;
+        }
 
     }
 }

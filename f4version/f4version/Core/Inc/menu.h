@@ -22,5 +22,5 @@ extern int Desktop2_SETdirection;
 void Desktop1(void);
 void Desktop2_SET(int direction);
 void HELL(void);
-void Desktop2_VCU(void);
+
 #endif //F4VERSION_MENU_H

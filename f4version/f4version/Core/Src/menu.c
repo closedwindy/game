@@ -171,16 +171,5 @@ void HELL(void)
 
 }
 
-void Desktop2_VCU(void)
-{
-    u8g2_SetDrawColor(&u8g2,1);
-    u8g2_ClearBuffer(&u8g2);
 
-    u8g2_SetFont(&u8g2, u8g2_font_8x13B_tr);
-    u8g2_DrawStr(&u8g2,0,16,"MaximumSpeed:");
-    u8g2_DrawStr(&u8g2,0,32,"MinimumSpeed:");
-
-    u8g2_SendBuffer(&u8g2);
-
-}
 
